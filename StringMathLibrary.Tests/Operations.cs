@@ -6,10 +6,24 @@ namespace StringMathLibrary.Tests
     public class Operations
     {
         [Theory]
+        [InlineData("0", "0")]
+        [InlineData("-11", "11")]
+        [InlineData("20", "20")]
+        [InlineData("-2.5", "2.5")]
+        public void Abs(string number, string expected)
+        {
+            string result = StringMath.Abs(number);
+
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
         [InlineData("0", "0", "0")]
         [InlineData("1", "0", "1")]
         [InlineData("-1", "0", "-1")]
         [InlineData("10", "-15", "-5")]
+        [InlineData("-10", "-15", "-25")]
+        [InlineData("-15", "10", "-5")]
         [InlineData("11", "99", "110")]
         [InlineData("99", "99", "198")]
         [InlineData("1.25", "27.7", "28.95")]
@@ -29,6 +43,8 @@ namespace StringMathLibrary.Tests
         [InlineData("-1", "0", "-1")]
         [InlineData("0", "1", "-1")]
         [InlineData("10", "15", "-5")]
+        [InlineData("-10", "-15", "5")]
+        [InlineData("-15", "-10", "-5")]
         [InlineData("10", "-15", "25")]
         [InlineData("11", "99", "-88")]
         [InlineData("99", "99", "0")]
@@ -95,6 +111,49 @@ namespace StringMathLibrary.Tests
         public void Gcd(string left, string right, string expected)
         {
             string result = StringMath.Gcd(left, right);
+
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData("9", "81")]
+        [InlineData("-2", "4")]
+        [InlineData("1.2", "1.44")]
+        [InlineData("0.5", "0.25")]
+        [InlineData("111", "12321")]
+        [InlineData("1234", "1522756")]
+        public void Square(string number, string expected)
+        {
+            string result = StringMath.Square(number);
+
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData("81", 2, "9")]
+        [InlineData("-81", 2, "-9")]
+        [InlineData("112", 4, "10.583")]
+        [InlineData("112", 10, "10.5830052442")]
+        [InlineData("1522756", 2, "1234")]
+        public void Root(string number, int precision, string expected)
+        {
+            string result = StringMath.Root(number, precision);
+
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData("13", "1", 1)]
+        [InlineData("13", "15", -1)]
+        [InlineData("13", "13", 0)]
+        [InlineData("-13", "-10", -1)]
+        [InlineData("-23", "-45", 1)]
+        [InlineData("3.456", "5.12", -1)]
+        [InlineData("1.123", "1.124", -1)]
+        [InlineData("1.33", "1.329", 1)]
+        public void Compare(string left, string right, int expected)
+        {
+            int result = StringMath.Compare(left, right);
 
             Assert.Equal(expected, result);
         }

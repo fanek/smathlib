@@ -32,7 +32,7 @@ namespace StringMathLibrary
 
         protected static string SubtractPositiveNumbers(string left, string right)
         {
-            int comp = Compare(left, right);
+            int comp = CompareIntegers(left, right);
             if (comp == -1)
             {
                 string tmp = left; left = right; right = tmp;
@@ -85,7 +85,7 @@ namespace StringMathLibrary
                 //return ("Cannot divide by zero", "0");
                 throw new DivideByZeroException("Cannot divide by zero");
 
-            int comp = Compare(left, right);
+            int comp = CompareIntegers(left, right);
             if (comp == 0)
                 return ("1", "0");
             else if (comp < 0)
@@ -96,7 +96,7 @@ namespace StringMathLibrary
             {
                 int numberZeros = AddZeros(left, right, out string rightWithZeros);
                 left = SubtractPositiveNumbers(left, rightWithZeros);
-                comp = Compare(left, right);
+                comp = CompareIntegers(left, right);
                 multiplier = AddPositiveNumbers(multiplier, AddTrailingZeros(numberZeros));
             }
             while (comp > 0);
@@ -209,7 +209,7 @@ namespace StringMathLibrary
                 while (true)
                 {
                     string tmp = rightWithZeros + '0';
-                    if (Compare(left, tmp) <= 0)
+                    if (CompareIntegers(left, tmp) <= 0)
                         return tens;
                     tens++;
                     rightWithZeros = tmp;
@@ -237,7 +237,7 @@ namespace StringMathLibrary
             return result.Length == 0 ? "0" : result.ToString();
         }
 
-        protected static int Compare(string x, string y)
+        protected static int CompareIntegers(string x, string y)
         {
             if (x.Length == y.Length)
                 return CompareEqualLength(x, y);
@@ -254,6 +254,22 @@ namespace StringMathLibrary
                 else if (x[i] < y[i])
                     return -1;
             return 0;
+        }
+
+        protected static int CompareDecimals(string x, string y)
+        {
+            var (first, firstNegative, firstDecimalDigits) = RemoveSignAndPoint(x);
+            var (second, secondNegative, secondDecimalDigits) = RemoveSignAndPoint(y);
+
+            if (firstNegative && !secondNegative)
+                return -1;
+            else if (!firstNegative && secondNegative)
+                return 1;
+
+            (first, second) = AlignDecimals(first, firstDecimalDigits, second, secondDecimalDigits);
+
+            int comp = CompareIntegers(first, second);
+            return (firstNegative && secondNegative) ? -1 * comp : comp;
         }
     }
 }

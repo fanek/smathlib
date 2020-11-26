@@ -19,9 +19,11 @@ namespace StringMathLibrary
         {
             get { return isPositive; }
         }
+        public int Precision = 10;
 
-        public StringNumber(string value)
+        public StringNumber(string value, int precision = 10)
         {
+            Precision = precision;
             SetFields(value);
         }
 
@@ -66,7 +68,7 @@ namespace StringMathLibrary
 
         public StringNumber Divide(StringNumber value)
         {
-            string result = StringMath.Divide(number, value.ToString());
+            string result = StringMath.Divide(number, value.ToString(), Precision);
 
             return SetFields(result);
         }
@@ -76,6 +78,25 @@ namespace StringMathLibrary
             string result = StringMath.Gcd(number, value.ToString());
 
             return new StringNumber(result);
+        }
+
+        public StringNumber Square()
+        {
+            string result = StringMath.Multiply(number, number);
+
+            return SetFields(result);
+        }
+
+        public StringNumber Root()
+        {
+            string result = StringMath.Root(number, Precision);
+
+            return SetFields(result);
+        }
+
+        public int Compare(StringNumber value)
+        {
+            return StringMath.Compare(number, value.ToString());
         }
 
         public override string ToString()
